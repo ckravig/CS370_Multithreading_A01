@@ -16,18 +16,18 @@ import java.util.List;
 
 class SquareRoot {
     public static void main(String[] args) {
-        final int numChild = 6;
-        final int total = 20000;
+        final int numChild = 1000;
+        final int total = 200000;
         double range = total/numChild;
         double begin=0.0;
         List<Thread> threads = new ArrayList<Thread>();
 
-
-        System.out.println("Run SquareRoot " + total + ":" + numChild);
+	System.out.println("Total: " + total);
+        //System.out.println("Run SquareRoot " + total + ":" + numChild);
 
         // Spawn children processes
         for (int i=0; i<numChild; i++) {
-            Thread t = new Thread(new Child(begin, begin+range));
+            Thread t = new Thread(new SquareChild(begin, begin+range));
             t.start();
             threads.add(t);
             begin += range + 1;
@@ -41,13 +41,13 @@ class SquareRoot {
     }
 }
 
-class Child implements Runnable {
+class SquareChild implements Runnable {
     private double begin;
     private double end;
     double memAttr;
     double global;
 
-    public Child(double begin, double end) {
+    public SquareChild(double begin, double end) {
         this.begin = begin;
         this.end = end;
     }
@@ -55,7 +55,7 @@ class Child implements Runnable {
     @Override
     public void run() {
         // Print the current CPU number
-        System.out.println("CPU=" + Thread.currentThread().getName());
+        //System.out.println("CPU=" + Thread.currentThread().getName());
 
         // Get the current time
         long start_s = System.currentTimeMillis();
@@ -63,15 +63,15 @@ class Child implements Runnable {
         for (int local = (int)begin; local < end; local++) {
             double root = Math.sqrt(local);
             // revised lines to do prints:
-            System.out.println(local + ":" + root + " ");
-            if (local%5==0) System.out.println();
-            totalSum += root;
+          //  System.out.println(local + ":" + root + " ");
+ //           if (local%5==0) System.out.println();
+ //           totalSum += root;
         }
 
         // Are class attributes and globals shared?
-        System.out.println("  totalSum=" + totalSum + " global=" + ++global + " memAttr=" + ++memAttr);
+        //System.out.println("  totalSum=" + totalSum + " global=" + ++global + " memAttr=" + ++memAttr);
         // Calculate execution time in ms and print
         long stop_s = System.currentTimeMillis();
-        System.out.println("time: " + (stop_s - start_s));
+        //System.out.println("time: " + (stop_s - start_s));
     }
 }
